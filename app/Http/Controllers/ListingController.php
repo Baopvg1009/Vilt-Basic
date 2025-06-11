@@ -5,15 +5,26 @@ namespace App\Http\Controllers;
 use App\Models\Listing;
 use App\Http\Requests\StoreListingRequest;
 use App\Http\Requests\UpdateListingRequest;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ListingController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $listings = Listing::with('user')
+            ->filter(request(['search']))
+            ->latest()
+            ->paginate(6)
+            ->withQueryString();
+
+        return Inertia::render('Home', [
+            'listings' => $listings,
+            'searchTerm' => $request->search,
+        ]);
     }
 
     /**
