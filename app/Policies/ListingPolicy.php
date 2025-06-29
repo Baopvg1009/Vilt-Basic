@@ -12,6 +12,14 @@ class ListingPolicy
     /**
      * Determine whether the user can view the model.
      */
+
+    public function before(User $user)
+    {
+        if ($user->role === 'admin') {
+            return true;
+        }
+        return null; // Allow other policies to be checked
+    }
     public function view(?User $user, Listing $listing): bool
     {
         return $listing->user->role !== 'suspended' && $listing->approved;
@@ -31,4 +39,9 @@ class ListingPolicy
     {
         return $user->role !== 'suspended' && $user->id === $listing->user_id;
     } //update, delete
+
+    public function approve(User $user, Listing $listing)
+    {
+        return $user->isAdmin();
+    }
 }
