@@ -31,3 +31,6 @@
         <env name="TELESCOPE_ENABLED" value="false"/>
     </php>
 </phpunit>
+
+<!--
+    This file is part of the Pulse project.
